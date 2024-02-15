@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Finder</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            display:grid;
+            justify-items: center;
+            align-items: center;
+            background-image:url("images/gamebackground.jpg");
+            height:100vh;
+            overflow:none;
+        }
+        ::-webkit-scrollbar{
+            display:none;
+        }
+
+        img{
+            display: none;
+        }
+
+        #scorecard{
+            display: flex;
+            color: white;
+            width:50%;
+            height:45px;
+            align-items: center;
+            justify-content:space-between;
+            padding:5px;
+            display: none;
+        }
+
+        #scorecard  img{
+            height:20px;
+        }
+
+        #scorecard > #bonusdis{
+            display: flex;
+            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            gap:5px;
+        }
+
+        #level,#bomb{
+            text-transform: capitalize;
+            font-size: 20px;
+            font-weight: bolder;
+        }
+        #card{
+            border: 1px solid white;
+            height:25%;
+            width:25%;
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+        }
+        #card > h1{
+            grid-column: 1/3;
+            justify-self: center;
+            text-transform: capitalize;
+            color:aliceblue;
+            align-self: center;
+        }
+        #card > button{
+            width:80%;
+            align-self: center;
+            justify-self: center;
+            height:40%;
+            text-transform: capitalize;
+            font-weight:bolder;
+            font-size:16px;
+            color: white;
+            border: 2px solid white;
+            background-color: transparent;
+        }
+        #parent{
+            display: none;
+        }
+        #card > button:hover{
+            border-color: red;
+        }
+        #gameover > button:hover{
+            border-color: red;
+        }
+        #lindicator{
+            display: none;
+            color: white;
+            font-size: 2rem;
+            text-transform: capitalize;
+            font-weight: bolder;
+            height:50px;
+            width:150px;
+            position: absolute;
+        }
+        #gameover{
+            display:none;
+            position: absolute;
+            height:25%;
+            width:25%;
+            color: white;
+            border: 1px solid white;
+            justify-items: center;
+            align-items:center;
+            text-transform: capitalize;
+        }
+        #gameover > button{
+            border:2px solid white;
+            background-color: transparent;
+            color: white;
+            text-transform: capitalize;
+            width:50%;
+            height:50%;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        #rulesdis{
+            position: absolute;
+            width:60%;
+            height: 90%;
+            background-color: rgba(0, 0, 0, 0.635);
+            padding:10px;
+            box-sizing:border-box;
+            display:none;
+            justify-items: center;
+            align-items: center;
+        }
+        #closebtn{
+            position: absolute;
+            top: 0;
+            right:0;
+            background-color: transparent;
+            border: 1px solid white;
+            padding:3px;
+            color: white;
+            font-size:20px;
+        }
+        #rulescard{
+            display: flex;
+            flex-direction:column;
+            row-gap:10px;
+            background-color: rgba(51, 39, 222, 0.671);
+            padding:5px;
+            box-sizing: border-box;
+            color:white;
+        }
+        .list{
+            font-size:20px;
+            list-style-position: inside;
+           
+        }
+        .list > li{
+            margin-top:5px;
+        }
+        #imgp{
+            display:inline;
+        }
+    </style>
+</head>
+<body>
+     <div id="lindicator">level-1</div>
+    <div id="card">
+        <h1>path finder</h1>
+        <button id="start">start</button>
+        <button id="rules">how to play</button>
+    </div>
+    <div id="rulesdis">
+       <button id="closebtn">x</button>
+       <div id="rulescard">
+         <h3>Movement And Dropping Bomb</h3>
+         <ul class="list">
+            <li>To move right, press the rightarrow key</li>
+            <li>To move left, press the leftarrow key</li>
+            <li>To move up, press the uparrow key</li>
+            <li>To move down, press the downarrow key</li>
+            <li>To drop a bomb, press the space key</li>
+         </ul>
+        <h3>Objective</h3>
+        <ul class="list">
+            <li>Your goal is to collect all the dollar  scattered throughout the level</li>
+            <li>Once you've collected all the dollars, the gate will open</li>
+            <li>Once you've collected all the dollars, the gate will open</li>
+        </ul>
+        <h3> Game over</h3>
+        <ul class="list">
+            <li>Be careful! If you're caught by enemies or trapped without any means of escape, you'll lose a life</li>
+            <li>You have a limited number of lives, so use them wisely</li>
+        </ul>
+       </div>
+    </div>
+    <div id="scorecard">
+       <div id="level"></div>
+       <div id="life"></div>
+       <div id="bomb"></div>
+       <div id="bonusdis">
+         <img src="./images/bonus.js.png" style="display:inline;"/>
+         <spna id="bonusholder">0/10</spna>
+       </div>
+    </div>
+    <div id="gameover">
+        <h1>game-over</h1>
+        <button id="restart">restart</button>
+    </div>
+     <div id="parent"></div> 
+     <img src="images/player.png" id="player"/>
+     <img src="images/en-01.png" class="enmy"/> 
+     <img src="images/en-02.png" class="enmy"/> 
+     <img src="images/en-03.png" class="enmy"/> 
+     <img src="images/en-04.png" class="enmy"/> 
+     <img src="images/en-05.png" class="enmy"/> 
+     <img src="images/en-06.png" class="enmy"/>  
+     <img src="images/brick.png" id="bricks"/>  
+     <img src="images/bonus.js.png" id="dollar"/>
+     <img src="images/closedoor.png" class="doors"/>
+     <img src="images/opendoor.png" class="doors"/>
+    <script src="./index.js" type="module"></script>
+</body>
+</html>
